@@ -1,0 +1,45 @@
+package com.example.approvalservice.controller;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.approvalservice.model.ApprovalDTO;
+import com.example.approvalservice.model.validations.CreateApprovalAction;
+import com.example.approvalservice.model.validations.UpdateApprovalAction;
+import com.example.approvalservice.service.ApprovalService;
+
+/**
+ * Handles approval for credit card requests
+ * @author javadevopsmc06
+ *
+ */
+@RestController
+@RequestMapping(value="/v1/approval")
+public class ApprovalServiceCommandController {
+	private ApprovalService approvalService;
+	
+	@Autowired
+	public ApprovalServiceCommandController(ApprovalService approvalService) {
+		this.approvalService = approvalService;
+	}
+	
+	@PostMapping("/createApproval")
+	public ResponseEntity<String> processApproval(@RequestBody @Validated(CreateApprovalAction.class) 
+		ApprovalDTO approvalDto){
+		return ResponseEntity.ok(approvalService.beginApproval(approvalDto));
+	}
+	
+	@PutMapping("/update")
+	public ResponseEntity<String> updateApprovalRequest(@Validated(UpdateApprovalAction.class) @RequestBody 
+		@Valid ApprovalDTO approvalDto){
+		return ResponseEntity.ok(approvalService.processApprovalUpdate(approvalDto));
+	}
+}

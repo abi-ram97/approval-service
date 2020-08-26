@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;init=create schema if not exists MCDBO
+service:
+  creditCard: '//credit-card-service/v1/creditCards/' 

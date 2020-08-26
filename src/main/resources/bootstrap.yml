@@ -1,0 +1,12 @@
+server:
+  port: 8082
+  error:
+    include-message: always
+spring:
+  application:
+    name: approval-service
+  cloud:
+    config:
+      uri: http://localhost:8889
+  devtools:
+    add-properties: false
