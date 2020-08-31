@@ -22,11 +22,24 @@ import com.example.approvalservice.model.ServiceError;
 @RestControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	
+	/**
+	 * exception handler for RuntimeException
+	 * @param rte
+	 * @return
+	 */
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<Object> handleRunTimeException(RuntimeException rte){
 		return ResponseEntity.badRequest().body(ServiceError.builder().errorMessage(rte.getMessage()).status(HttpStatus.INTERNAL_SERVER_ERROR.value()).build());
 	}
 
+	/**
+	 * exception handler for MethodArgumentNotValidException
+	 * @param ex
+	 * @param headers
+	 * @param status
+	 * @param request
+	 * @return 
+	 */
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {

@@ -2,6 +2,8 @@ package com.example.approvalservice.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +26,7 @@ import com.example.approvalservice.service.ApprovalService;
 @RestController
 @RequestMapping(value="/v1/approval")
 public class ApprovalServiceCommandController {
+	private final Logger logger = LoggerFactory.getLogger(ApprovalServiceCommandController.class);
 	private ApprovalService approvalService;
 	
 	@Autowired
@@ -31,15 +34,28 @@ public class ApprovalServiceCommandController {
 		this.approvalService = approvalService;
 	}
 	
+	
+	/**
+	 * creates approval requests
+	 * @param approvalDto
+	 * @return ResponseEntity
+	 */
 	@PostMapping("/createApproval")
 	public ResponseEntity<String> processApproval(@RequestBody @Validated(CreateApprovalAction.class) 
 		ApprovalDTO approvalDto){
+		logger.info("Begin approval for [{}]", approvalDto.getRequestId());
 		return ResponseEntity.ok(approvalService.beginApproval(approvalDto));
 	}
 	
+	/**
+	 * updates the status of approval request
+	 * @param approvalDto
+	 * @return ResponseEntity
+	 */
 	@PutMapping("/update")
 	public ResponseEntity<String> updateApprovalRequest(@Validated(UpdateApprovalAction.class) @RequestBody 
 		@Valid ApprovalDTO approvalDto){
+		logger.info("Updating status for [{}] with [{}]", approvalDto.getRequestId(), approvalDto.getStatus());
 		return ResponseEntity.ok(approvalService.processApprovalUpdate(approvalDto));
 	}
 }

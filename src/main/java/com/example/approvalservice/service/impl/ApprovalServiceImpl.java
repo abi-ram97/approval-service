@@ -64,6 +64,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	 */
 	@Override
 	public String processApprovalUpdate(ApprovalDTO approvalDto) {
+		log.info("Updating [{}] with [{}]", approvalDto.getRequestId(), approvalDto.getStatus());
 		Optional<ApprovalRequests> optionalReq = approvalRequestRepository.findByApprovalIdAndRequestId(approvalDto.getApprovalId(), approvalDto.getRequestId());
 		if (optionalReq.isPresent()) {
 			ApprovalRequests request = optionalReq.get();
@@ -76,6 +77,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	private void updateRequest(ApprovalRequests request) {
+		log.info("Sending request update - [{}]", request.getRequestId());
 		UriComponentsBuilder uri = UriComponentsBuilder.fromUriString(creditCardServiceUrl)
 				.path("update/")
 				.path(request.getRequestId())
